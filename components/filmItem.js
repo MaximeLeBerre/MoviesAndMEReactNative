@@ -3,6 +3,7 @@
 import React from 'react'
 import { StyleSheet, View, Text, Image } from 'react-native'
 import styles from '../styles/app.style'
+import {getUrlForPoster} from '../API/TMDBApi'
 
 class FilmItem extends React.Component {
   render() {
@@ -11,7 +12,7 @@ class FilmItem extends React.Component {
       <View style={styles.main_container_film}>
         <Image
           style={styles.image}
-          source={{uri: "image"}}
+          source={{uri: getUrlForPoster(film.poster_path)}}
         />
         <View style={styles.content_container}>
           <View style={styles.header_container}>

@@ -61,5 +61,15 @@ export default StyleSheet.create({
   date_text: {
     textAlign: 'right',
     fontSize: 14
+  },
+  loading_container: {
+    position: 'absolute',
+    left: 0,
+    right: 0,
+    top: 100,
+    bottom: 0,
+    alignItems: 'center',
+    justifyContent: 'center'
+
   }
 })
