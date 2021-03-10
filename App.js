@@ -1,10 +1,13 @@
-
 import React from 'react';
-import Search from './components/search'
+import Navigation from './Navigation/Navigation'
+import {Provider} from 'react-redux';
+import Store from './STORE/configureStore'
 
 export default function App() {
   return (
-      <Search />
+    <Provider store={Store}>
+      <Navigation />
+    </Provider>
   );
 }
 

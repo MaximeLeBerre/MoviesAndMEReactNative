@@ -1,21 +1,34 @@
-// Components/FilmItem.js
-
 import React from 'react'
-import { StyleSheet, View, Text, Image } from 'react-native'
+import {  View, Text, Image, TouchableOpacity } from 'react-native'
 import styles from '../styles/app.style'
 import {getUrlForPoster} from '../API/TMDBApi'
 
 class FilmItem extends React.Component {
+
+  _displayFavoriteImage() {
+    if (this.props.isFilmFavorite) {
+      // Si la props isFilmFavorite vaut true, on affiche le 🖤
+      return (
+        <Image
+          style={styles.favorite_image}
+          source={require('../Images/ic_favorite.png')}
+        />
+      )
+    }
+  }
+
   render() {
-    const film = this.props.film
+    const { film , displayDetailForFilm } = this.props
     return (
-      <View style={styles.main_container_film}>
+      <TouchableOpacity 
+        onPress={() => displayDetailForFilm(film.id)}
+        style={styles.main_container_film}>
         <Image
           style={styles.image}
-          source={{uri: getUrlForPoster(film.poster_path)}}
-        />
+          source={{uri: getUrlForPoster(film.poster_path)}}/>
         <View style={styles.content_container}>
           <View style={styles.header_container}>
+          {this._displayFavoriteImage()}
             <Text style={styles.title_text}>{film.title}</Text>
             <Text style={styles.vote_text}>{film.vote_average}</Text>
           </View>
@@ -27,7 +40,7 @@ class FilmItem extends React.Component {
             <Text style={styles.date_text}>Sorti le {film.release_date}</Text>
           </View>
         </View>
-      </View>
+      </TouchableOpacity>
     )
   }
 }

@@ -16,4 +16,22 @@ export function getUrlForPoster(name){
   )
     
 }
+export function getUrlForBannerOfFilmDetails(backdrop){
+  return (
+    `https://image.tmdb.org/t/p/w300${backdrop}`
+  )
+    
+}
+
+export function getFilmDetailFromApi(id){
+
+  const url = `https://api.themoviedb.org/3/movie/${id}?api_key=${API_TOKEN}&language=en-US`;
+  return (
+    fetch(url)
+    .then((response) =>response.json())
+    .catch((error) => console.log(error))
+    
+  )
+    
+}
 
