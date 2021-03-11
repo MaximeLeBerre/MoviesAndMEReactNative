@@ -1,14 +1,32 @@
 import React from 'react';
-import {View, Text, ActivityIndicator, Image, TouchableOpacity} from 'react-native';
+import {View, Text, Share, Platform, ActivityIndicator, Image, TouchableOpacity,} from 'react-native';
 import styles from '../styles/app.style';
 import {getFilmDetailFromApi, getUrlForBannerOfFilmDetails} from '../API/TMDBApi';
 import { ScrollView } from 'react-native-gesture-handler';
 import moment from 'moment'
 import numeral from 'numeral'
 import { connect } from 'react-redux';
+import EnlargeShrink from '../Animation/EnlargeShrink'
 
 
 class FilmDetails extends React.Component{
+
+  static navigationOptions = ({ navigation }) => {
+    const { params } = navigation.state
+    // On accède à la fonction shareFilm et au film via les paramètres qu'on a ajouté à la navigation
+    if (params.film != undefined && Platform.OS === 'ios') {
+      return {
+          // On a besoin d'afficher une image, il faut donc passe par une Touchable une fois de plus
+          headerRight: <TouchableOpacity
+                          style={styles.share_touchable_headerrightbutton}
+                          onPress={() => params.shareFilm()}>
+                          <Image
+                            style={styles.share_image}
+                            source={require('../Images/ic_share.ios.png')} />
+                        </TouchableOpacity>
+      }
+    }
+}
 
   constructor(props){
     super(props);
@@ -18,15 +36,25 @@ class FilmDetails extends React.Component{
     }
   }
 
+  _updateNavigationParams(){
+    this.props.navigation.setParams({
+      shareFilm: this._shareFilm,
+      film: this.state.film
+    })
+  }
+
   componentDidMount(){
     const favoritesFilmIndex = this.props.favoritesFilm.findIndex(
       item => item.id === this.props.navigation.state.params.id)
      if(favoritesFilmIndex !== -1){
         this.setState({
           film: this.props.favoritesFilm[favoritesFilmIndex]
-        })
+        }, () => {this._updateNavigationParams()})
         return
      }
+
+
+     
 
 
 
@@ -34,8 +62,36 @@ class FilmDetails extends React.Component{
         this.setState({
           film : data,
           isLoading: false
-        })
+        }, () => {this._updateNavigationParams()})
       })
+  }
+
+  _shareFilm = () => {
+    const {film} = this.state
+
+    Share.share({
+      title: film.title,
+      message: film.overview
+    })
+  }
+
+  _displayFloatingActionButton(){
+    const {film} = this.state
+
+    if(film  !== undefined && Platform.OS === 'android'){
+      return(
+        <TouchableOpacity
+          style={styles.share_touchable_floatingactionbutton}
+          onPress={() => this._shareFilm()}
+        >
+          <Image
+            style={styles.share_image}
+            source={require('../Images/ic_share.android.png')}
+
+          />          
+        </TouchableOpacity>
+      )
+    }
   }
 
   _toggleFavorite(){
@@ -48,11 +104,17 @@ class FilmDetails extends React.Component{
 
   _displayFavoriteImage() {
     var sourceImage = require("../Images/ic_favorite_border.png")
+    var shouldEnlarge = false
     if(this.props.favoritesFilm.findIndex(item => item.id === this.state.film.id) !== -1){
        sourceImage = require("../Images/ic_favorite.png")
+       shouldEnlarge = true
     }
     return(
-      <Image source={sourceImage} style={styles.favorite_image} />
+      <EnlargeShrink
+        shouldEnlarge={shouldEnlarge}>
+        <Image source={sourceImage} style={styles.favorite_image_animation} />
+      </EnlargeShrink>
+      
     )
   }
 
@@ -98,6 +160,7 @@ class FilmDetails extends React.Component{
       <View style={styles.FilmDetails}>
         {this._displayLoading()}
         {this._displayFilm()}
+        {this._displayFloatingActionButton()}
       </View>
     )
   }

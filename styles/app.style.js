@@ -121,11 +121,31 @@ export default StyleSheet.create({
     width : 40,
     height: 40
   },
+  favorite_image_animation : {
+    flex: 1,
+    width : null,
+    height: null
+  },
   icon: {
     width: 30,
     height: 30
   },
   list: {
     flex: 1
+  },
+  share_touchable_floatingactionbutton: {
+    position: 'absolute',
+    width: 60,
+    height: 60,
+    right: 30,
+    bottom: 30,
+    borderRadius: 30,
+    backgroundColor: '#e91e63',
+    justifyContent: 'center',
+    alignItems: 'center'
+  },
+  share_image: {
+    width: 30,
+    height: 30
   }
 })

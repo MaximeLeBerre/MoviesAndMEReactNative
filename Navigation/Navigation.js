@@ -6,6 +6,7 @@ import { createBottomTabNavigator } from 'react-navigation-tabs';
 import Search from '../components/search';
 import FilmDetails from '../components/filmDetails'
 import Favorites from '../components/favorites';
+import Test from '../components/Test'
 import styles from '../styles/app.style';
 
 
