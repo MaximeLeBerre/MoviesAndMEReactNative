@@ -62,7 +62,7 @@ const MoviesTabNavigator = createBottomTabNavigator({
     }
   }
 } , {
-  tabBarOptions: {
+  tabBarOptions:{
     showLabel: false,
     showIcon: true,
     activeBackgroundColor: '#DDDDDD',
