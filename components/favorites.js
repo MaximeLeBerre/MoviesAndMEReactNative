@@ -1,6 +1,7 @@
 import React from 'react';
 import {View, Text} from 'react-native';
-import styles from '../styles/app.style';
+import { connect } from 'react-redux';
+import FilmList from './FilmList';
 
 
 class Favorites extends React.Component{
@@ -11,9 +12,20 @@ class Favorites extends React.Component{
 
   render(){
     return(
-        <Text>Favorites</Text>
+        <FilmList 
+          films={this.props.favoritesFilm}
+          navigation={this.props.navigation}
+          favoriteList={true}
+        />
     )
   }
 }
 
-export default Favorites;
+
+const mapStateToProps= state => {
+  return {
+    favoritesFilm: state.favoritesFilm
+  }
+}
+
+export default connect(mapStateToProps)(Favorites);

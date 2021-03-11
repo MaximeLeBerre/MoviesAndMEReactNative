@@ -14,11 +14,22 @@ class FilmDetails extends React.Component{
     super(props);
     this.state = {
       film : undefined,
-      isLoading : true
+      isLoading : false
     }
   }
 
   componentDidMount(){
+    const favoritesFilmIndex = this.props.favoritesFilm.findIndex(
+      item => item.id === this.props.navigation.state.params.id)
+     if(favoritesFilmIndex !== -1){
+        this.setState({
+          film: this.props.favoritesFilm[favoritesFilmIndex]
+        })
+        return
+     }
+
+
+
     getFilmDetailFromApi(this.props.navigation.state.params.id).then(data => {
         this.setState({
           film : data,
@@ -35,11 +46,9 @@ class FilmDetails extends React.Component{
     this.props.dispatch(action)
   }
 
-  
-
   _displayFavoriteImage() {
     var sourceImage = require("../Images/ic_favorite_border.png")
-    if(this.props.favoritesFilm.findIndex(item => item.id === this.state.film.id) != -1){
+    if(this.props.favoritesFilm.findIndex(item => item.id === this.state.film.id) !== -1){
        sourceImage = require("../Images/ic_favorite.png")
     }
     return(
@@ -48,7 +57,7 @@ class FilmDetails extends React.Component{
   }
 
   _displayFilm(){
-    const film  = this.state.film;
+    const  film   = this.state.film;
     if(film != undefined){
       return(
         <ScrollView style={styles.ScrollView_container}>
@@ -87,8 +96,8 @@ class FilmDetails extends React.Component{
   render(){
     return(
       <View style={styles.FilmDetails}>
-        {this._displayFilm()}
         {this._displayLoading()}
+        {this._displayFilm()}
       </View>
     )
   }
